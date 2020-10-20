@@ -1,0 +1,20 @@
+# You should place your values in vars.yml file
+
+# Domain configured in Cloudflare
+domain: example.com
+
+# Local path to public certificate from Cloudflare
+cert_path: /home/user/example.pem
+
+# Local path to certificate private key from Cloudflare
+key_path: /home/user/example.key
+
+# Remote path on which v2ray will be available
+v2ray_path: v2ray
+
+# The site to which requests for your domain will be redirected
+redirect_url: https://youtube.com
+
+# Nameserver for shadowsocks.
+# 127.0.0.1 if using unbound, 1.1.1.1 in most other cases
+nameserver: 127.0.0.1

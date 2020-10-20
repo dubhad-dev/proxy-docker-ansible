@@ -1,0 +1,9 @@
+DNS_SERVER={{ nameserver }}
+PASSWORD={{ shadowsocks_password }}
+DOMAIN={{ domain }}
+V2RAY_CERT_PATH=/etc/ssl/proxy/{{ domain }}.pem
+V2RAY_KEY_PATH=/etc/ssl/proxy/{{ domain }}.key
+V2RAY_PATH={{ v2ray_path }}
+
+NOFILE_LIMIT={{ 131072 * ansible_processor_vcpus }}
+REDIRECT_URL={{ redirect_url }}

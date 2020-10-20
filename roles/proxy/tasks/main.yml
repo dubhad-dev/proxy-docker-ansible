@@ -1,0 +1,39 @@
+- name: Clone shadowsocks-v2ray repo
+  git:
+    repo: https://github.com/dubhad-dev/shadowsocks-v2ray-docker.git
+    dest: "{{ ansible_env.HOME }}/shadowsocks-v2ray-docker"
+
+- name: Create certs dir
+  file:
+    path: "{{ ansible_env.HOME }}/shadowsocks-v2ray-docker/certs"
+    state: directory
+
+- name: Copy public key
+  copy:
+    content: "{{ item }}"
+    dest: "{{ ansible_env.HOME }}/shadowsocks-v2ray-docker/certs/{{ domain }}.pem"
+    mode: "644"
+  with_file:
+    - "{{ cert_path }}"
+  register: cert_file
+
+- name: Copy private key
+  copy:
+    content: "{{ item }}"
+    dest: "{{ ansible_env.HOME }}/shadowsocks-v2ray-docker/certs/{{ domain }}.key"
+    mode: "644"
+  with_file:
+    - "{{ key_path }}"
+  register: key_file
+
+- name: Generate Diffie-Hellman parameters
+  openssl_dhparam:
+    path: "{{ ansible_env.HOME }}/shadowsocks-v2ray-docker/certs/dhparams.pem"
+    size: 4096
+    mode: "644"
+
+- name: Copy env file
+  template:
+    src: env_file
+    dest: "{{ ansible_env.HOME }}/shadowsocks-v2ray-docker/.env"
+    mode: "644"

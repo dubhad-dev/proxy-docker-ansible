@@ -1,0 +1,53 @@
+---
+
+- name: Install haveged
+  apt:
+    name: haveged
+    state: latest
+    update_cache: yes
+  tags: haveged
+
+- name: Enable haveged service
+  systemd:
+    name: haveged
+    state: restarted
+    enabled: yes
+  tags: haveged
+
+- name: Install ufw
+  apt:
+    name: ufw
+    state: latest
+    update_cache: yes
+  tags: firewall
+
+- name: Allow outgoing connections
+  ufw:
+    policy: allow
+    direction: outgoing
+  tags: firewall
+
+- name: Deny incoming connections
+  ufw:
+    policy: deny
+    direction: incoming
+  tags: firewall
+
+- name: Allow all access to tcp port 22
+  ufw:
+    rule: allow
+    port: "22"
+    proto: tcp
+  tags: firewall
+
+- name: Allow all access to tcp port 443
+  ufw:
+    rule: allow
+    port: "443"
+    proto: tcp
+  tags: firewall
+
+- name: Enable ufw
+  ufw:
+    state: enabled
+  tags: firewall

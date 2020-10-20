@@ -1,0 +1,23 @@
+- name: Load sysctl variables
+  include_vars:
+    file: sysctl.yml
+    name: sysctl_config
+
+- name: Tune the kernel
+  sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+    sysctl_set: yes
+    reload: yes
+  with_dict: "{{ sysctl_config }}"
+
+- name: Tune the pam limits
+  pam_limits:
+    domain: "{{ item }}"
+    limit_type: "-"
+    limit_item: nofile
+    value: "{{ 131072 * ansible_processor_vcpus }}"
+  with_items:
+    - "*"
+    - "root"
