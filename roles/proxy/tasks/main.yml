@@ -2,11 +2,13 @@
   git:
     repo: https://github.com/dubhad-dev/shadowsocks-v2ray-docker.git
     dest: "{{ ansible_env.HOME }}/shadowsocks-v2ray-docker"
+  tags: setup
 
 - name: Create certs dir
   file:
     path: "{{ ansible_env.HOME }}/shadowsocks-v2ray-docker/certs"
     state: directory
+  tags: setup
 
 - name: Copy public key
   copy:
@@ -16,6 +18,7 @@
   with_file:
     - "{{ cert_path }}"
   register: cert_file
+  tags: setup
 
 - name: Copy private key
   copy:
@@ -25,15 +28,30 @@
   with_file:
     - "{{ key_path }}"
   register: key_file
+  tags: setup
 
 - name: Generate Diffie-Hellman parameters
   openssl_dhparam:
     path: "{{ ansible_env.HOME }}/shadowsocks-v2ray-docker/certs/dhparams.pem"
     size: 4096
     mode: "644"
+  tags: setup
 
 - name: Copy env file
   template:
-    src: env_file
+    src: env_file.j2
     dest: "{{ ansible_env.HOME }}/shadowsocks-v2ray-docker/.env"
     mode: "644"
+  tags: setup
+
+- name: Pull shadowsocks docker image
+  command: docker-compose pull
+  args:
+    chdir: "{{ ansible_env.HOME }}/shadowsocks-v2ray-docker"
+  tags: setup
+
+- name: Up proxy service
+  command: docker-compose up -d
+  args:
+    chdir: "{{ ansible_env.HOME }}/shadowsocks-v2ray-docker"
+  tags: setup

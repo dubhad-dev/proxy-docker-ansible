@@ -5,9 +5,6 @@
   roles:
     - common
     - shadowsocks_tuning
-    - role: docker
-      vars:
-        docker_compose_version: "1.27.4"
     - proxy
 
   vars_files:

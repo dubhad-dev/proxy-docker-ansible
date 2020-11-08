@@ -2,6 +2,7 @@
   include_vars:
     file: sysctl.yml
     name: sysctl_config
+  tags: sysctl
 
 - name: Tune the kernel
   sysctl:
@@ -11,6 +12,7 @@
     sysctl_set: yes
     reload: yes
   with_dict: "{{ sysctl_config }}"
+  tags: sysctl
 
 - name: Tune the pam limits
   pam_limits:
@@ -21,3 +23,4 @@
   with_items:
     - "*"
     - "root"
+  tags: pam
